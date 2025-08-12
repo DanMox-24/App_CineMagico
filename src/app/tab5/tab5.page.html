@@ -1,0 +1,309 @@
+<!-- 
+  Página "Mis Tickets" - Vista de reservas de cine
+  Muestra:
+  - Reservas confirmadas con sus detalles
+  - Reservas pendientes de pago
+  - Estado vacío cuando no hay reservas
+  - Información importante para el usuario
+-->
+<ion-header [translucent]="true">
+  <!-- Barra de herramientas superior -->
+  <ion-toolbar color="success">
+    <!-- Botón de menú lateral izquierdo -->
+    <ion-buttons slot="start">
+      <ion-menu-button (click)="openMenu()"></ion-menu-button>
+    </ion-buttons>
+    
+    <!-- Título de la página con icono -->
+    <ion-title>
+      <ion-icon name="ticket-outline" style="margin-right: 8px;"></ion-icon>
+      Mis Tickets
+    </ion-title>
+    
+    <!-- Botón para nueva reserva (derecha) -->
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="nuevaReserva()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Contenido principal -->
+<ion-content [fullscreen]="true" class="tickets-content">
+  <!-- Versión condensada del header para ciertos dispositivos -->
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tickets</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- ========== SECCIÓN DE RESERVAS CONFIRMADAS ========== -->
+  <div class="section" *ngIf="misReservas.length > 0">
+    <h2 class="section-title">
+      <ion-icon name="checkmark-circle"></ion-icon>
+      Mis Reservas
+    </h2>
+    
+    <!-- Grid para organizar las tarjetas de reserva -->
+    <ion-grid>
+      <ion-row>
+        <!-- Tarjeta individual por cada reserva -->
+        <ion-col size="12" size-lg="6" *ngFor="let reserva of misReservas">
+          <!-- Tarjeta con clase dinámica según estado -->
+          <ion-card class="ticket-card" [class]="'ticket-' + reserva.estado">
+            <!-- Encabezado de la tarjeta -->
+            <div class="ticket-header">
+              <div class="ticket-info">
+                <h3 class="movie-title">{{ reserva.pelicula }}</h3>
+                <!-- Chip de estado con color dinámico -->
+                <ion-chip [color]="getEstadoColor(reserva.estado)" class="status-chip">
+                  <ion-label>{{ getEstadoTexto(reserva.estado) }}</ion-label>
+                </ion-chip>
+              </div>
+              <!-- ID de reserva -->
+              <div class="ticket-id">
+                <span>{{ reserva.id }}</span>
+              </div>
+            </div>
+
+            <!-- Contenido de la tarjeta -->
+            <ion-card-content>
+              <div class="ticket-details">
+                <!-- Fila de fecha -->
+                <div class="detail-row">
+                  <div class="detail-item">
+                    <ion-icon name="calendar" color="primary"></ion-icon>
+                    <div>
+                      <span class="detail-label">Fecha</span>
+                      <span class="detail-value">{{ formatearFecha(reserva.fecha) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Fila de hora y sala -->
+                <div class="detail-row">
+                  <div class="detail-item half-width">
+                    <ion-icon name="time" color="secondary"></ion-icon>
+                    <div>
+                      <span class="detail-label">Hora</span>
+                      <span class="detail-value">{{ reserva.hora }}</span>
+                    </div>
+                  </div>
+                  <div class="detail-item half-width">
+                    <ion-icon name="videocam" color="tertiary"></ion-icon>
+                    <div>
+                      <span class="detail-label">Sala</span>
+                      <span class="detail-value">{{ reserva.sala }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Fila de asientos y formato -->
+                <div class="detail-row">
+                  <div class="detail-item half-width">
+                    <ion-icon name="location" color="warning"></ion-icon>
+                    <div>
+                      <span class="detail-label">Asientos</span>
+                      <span class="detail-value">{{ reserva.asientos.join(', ') }}</span>
+                    </div>
+                  </div>
+                  <div class="detail-item half-width">
+                    <ion-icon name="eye" color="success"></ion-icon>
+                    <div>
+                      <span class="detail-label">Formato</span>
+                      <span class="detail-value">{{ reserva.formato }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sección de precio -->
+                <div class="price-section">
+                  <div class="price-total">
+                    <span class="price-label">Total Pagado</span>
+                    <span class="price-amount">${{ reserva.precio | number }}</span>
+                  </div>
+                </div>
+
+                <!-- Sección de código QR (solo para reservas confirmadas) -->
+                <div class="qr-section" *ngIf="reserva.estado === 'confirmada' && reserva.codigoQR">
+                  <div class="qr-container">
+                    <img [src]="reserva.codigoQR" alt="Código QR" class="qr-code">
+                    <p class="qr-instructions">Presenta este código en el cine</p>
+                  </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="ticket-actions">
+                  <!-- Botón de descarga -->
+                  <ion-button 
+                    *ngIf="reserva.estado === 'confirmada'" 
+                    fill="solid" 
+                    color="primary" 
+                    size="small"
+                    (click)="descargarTicket(reserva)">
+                    <ion-icon name="download" slot="start"></ion-icon>
+                    Descargar
+                  </ion-button>
+                  
+                  <!-- Botón de compartir -->
+                  <ion-button 
+                    *ngIf="reserva.estado === 'confirmada'" 
+                    fill="outline" 
+                    color="secondary" 
+                    size="small"
+                    (click)="compartirTicket(reserva)">
+                    <ion-icon name="share" slot="start"></ion-icon>
+                    Compartir
+                  </ion-button>
+                  
+                  <!-- Botón de cancelar -->
+                  <ion-button 
+                    *ngIf="reserva.estado === 'confirmada'" 
+                    fill="clear" 
+                    color="danger" 
+                    size="small"
+                    (click)="cancelarReserva(reserva)">
+                    <ion-icon name="close" slot="start"></ion-icon>
+                    Cancelar
+                  </ion-button>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- ========== SECCIÓN DE RESERVAS PENDIENTES ========== -->
+  <div class="section" *ngIf="proximasReservas.length > 0">
+    <h2 class="section-title">
+      <ion-icon name="hourglass"></ion-icon>
+      Reservas Pendientes
+    </h2>
+    
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-lg="6" *ngFor="let reserva of proximasReservas">
+          <!-- Tarjeta con overlay de pendiente -->
+          <ion-card class="ticket-card ticket-pending">
+            <div class="pending-overlay">
+              <ion-icon name="time" class="pending-icon"></ion-icon>
+              <p>Pendiente de Pago</p>
+            </div>
+
+            <!-- Encabezado de la tarjeta -->
+            <div class="ticket-header">
+              <div class="ticket-info">
+                <h3 class="movie-title">{{ reserva.pelicula }}</h3>
+                <!-- Chip de estado (siempre amarillo para pendientes) -->
+                <ion-chip color="warning" class="status-chip">
+                  <ion-label>{{ getEstadoTexto(reserva.estado) }}</ion-label>
+                </ion-chip>
+              </div>
+              <div class="ticket-id">
+                <span>{{ reserva.id }}</span>
+              </div>
+            </div>
+
+            <!-- Contenido de la tarjeta -->
+            <ion-card-content>
+              <div class="ticket-details">
+                <!-- Fila de fecha -->
+                <div class="detail-row">
+                  <div class="detail-item">
+                    <ion-icon name="calendar" color="primary"></ion-icon>
+                    <div>
+                      <span class="detail-label">Fecha</span>
+                      <span class="detail-value">{{ formatearFecha(reserva.fecha) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Fila de hora y asientos -->
+                <div class="detail-row">
+                  <div class="detail-item half-width">
+                    <ion-icon name="time" color="secondary"></ion-icon>
+                    <div>
+                      <span class="detail-label">Hora</span>
+                      <span class="detail-value">{{ reserva.hora }}</span>
+                    </div>
+                  </div>
+                  <div class="detail-item half-width">
+                    <ion-icon name="location" color="warning"></ion-icon>
+                    <div>
+                      <span class="detail-label">Asientos</span>
+                      <span class="detail-value">{{ reserva.asientos.join(', ') }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sección de precio (estilo diferente para pendientes) -->
+                <div class="price-section">
+                  <div class="price-total pending-price">
+                    <span class="price-label">Total a Pagar</span>
+                    <span class="price-amount">${{ reserva.precio | number }}</span>
+                  </div>
+                </div>
+
+                <!-- Botón de pago (única acción disponible) -->
+                <div class="ticket-actions">
+                  <ion-button expand="block" color="success">
+                    <ion-icon name="card" slot="start"></ion-icon>
+                    Pagar Ahora
+                  </ion-button>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- ========== ESTADO VACÍO ========== -->
+  <div class="empty-state" *ngIf="misReservas.length === 0 && proximasReservas.length === 0">
+    <ion-icon name="ticket" class="empty-icon"></ion-icon>
+    <h3>No tienes reservas</h3>
+    <p>¡Explora nuestra cartelera y reserva tu función favorita!</p>
+    <ion-button color="primary" (click)="nuevaReserva()">
+      <ion-icon name="film" slot="start"></ion-icon>
+      Ver Cartelera
+    </ion-button>
+  </div>
+
+  <!-- ========== INFORMACIÓN ADICIONAL ========== -->
+  <div class="info-section">
+    <ion-card class="info-card">
+      <ion-card-content>
+        <div class="info-header">
+          <ion-icon name="information-circle" color="primary"></ion-icon>
+          <h4>Información Importante</h4>
+        </div>
+        <!-- Lista de items informativos -->
+        <ion-list lines="none">
+          <ion-item>
+            <ion-icon name="time" slot="start" color="medium"></ion-icon>
+            <ion-label class="info-label">
+              <p>Llega 15 minutos antes de la función</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="qr-code" slot="start" color="medium"></ion-icon>
+            <ion-label class="info-label">
+              <p>Presenta tu código QR en taquilla</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="card" slot="start" color="medium"></ion-icon>
+            <ion-label class="info-label">
+              <p>Las cancelaciones son gratuitas hasta 2 horas antes</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>

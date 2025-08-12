@@ -1,0 +1,187 @@
+<!-- Encabezado principal con menú lateral, título y botón de carrito -->
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <!-- Botón para abrir el menú lateral -->
+      <ion-menu-button (click)="openMenu()"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <!-- Icono y título de la sección -->
+      <ion-icon name="fast-food-outline" style="margin-right: 8px;"></ion-icon>
+      Snacks & Bebidas
+    </ion-title>
+    <ion-buttons slot="end">
+      <!-- Botón de acceso al carrito con contador de ítems -->
+      <ion-button fill="clear">
+        <ion-badge color="danger" *ngIf="carrito.length > 0">{{ carrito.length }}</ion-badge>
+        <ion-icon name="basket"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Contenido principal de la página -->
+<ion-content [fullscreen]="true" class="snacks-content">
+  <!-- Encabezado condensado para scroll -->
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Snacks</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Sección de combos especiales -->
+  <div class="section">
+    <h2 class="section-title">
+      <ion-icon name="gift"></ion-icon>
+      Combos Especiales
+    </h2>
+
+    <!-- Grid de combos -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="6" size-lg="4" *ngFor="let combo of combos">
+          <ion-card class="food-card combo-card">
+            <div class="card-image-container">
+              <!-- Imagen del combo -->
+              <img [src]="combo.imagen" [alt]="combo.nombre">
+              <!-- Precio flotante -->
+              <div class="price-badge combo-badge">
+                <span class="price">${{ combo.precio | number }}</span>
+              </div>
+            </div>
+            <ion-card-content>
+              <!-- Nombre y descripción del combo -->
+              <h3>{{ combo.nombre }}</h3>
+              <p class="description">{{ combo.descripcion }}</p>
+              <!-- Botón para agregar al carrito -->
+              <ion-button expand="block" fill="solid" color="secondary" (click)="agregarAlCarrito(combo)">
+                <ion-icon name="add-circle" slot="start"></ion-icon>
+                Agregar al Carrito
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Sección de snacks individuales -->
+  <div class="section">
+    <h2 class="section-title">
+      <ion-icon name="nutrition"></ion-icon>
+      Snacks
+    </h2>
+
+    <!-- Grid de snacks -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="6" size-lg="4" *ngFor="let snack of snacks">
+          <ion-card class="food-card">
+            <div class="card-image-container">
+              <!-- Imagen del snack -->
+              <img [src]="snack.imagen" [alt]="snack.nombre">
+              <!-- Precio flotante -->
+              <div class="price-badge">
+                <span class="price">${{ snack.precio | number }}</span>
+              </div>
+            </div>
+            <ion-card-content>
+              <!-- Nombre y descripción del snack -->
+              <h3>{{ snack.nombre }}</h3>
+              <p class="description">{{ snack.descripcion }}</p>
+              <!-- Botón para agregar al carrito -->
+              <ion-button expand="block" fill="outline" color="primary" (click)="agregarAlCarrito(snack)">
+                <ion-icon name="add" slot="start"></ion-icon>
+                Agregar
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Sección de bebidas -->
+  <div class="section">
+    <h2 class="section-title">
+      <ion-icon name="wine"></ion-icon>
+      Bebidas
+    </h2>
+
+    <!-- Grid de bebidas -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="6" size-lg="4" *ngFor="let bebida of bebidas">
+          <ion-card class="food-card drink-card">
+            <div class="card-image-container">
+              <!-- Imagen de la bebida -->
+              <img [src]="bebida.imagen" [alt]="bebida.nombre">
+              <!-- Precio flotante -->
+              <div class="price-badge drink-badge">
+                <span class="price">${{ bebida.precio | number }}</span>
+              </div>
+            </div>
+            <ion-card-content>
+              <!-- Nombre y descripción de la bebida -->
+              <h3>{{ bebida.nombre }}</h3>
+              <p class="description">{{ bebida.descripcion }}</p>
+              <!-- Botón para agregar al carrito -->
+              <ion-button expand="block" fill="solid" color="tertiary" (click)="agregarAlCarrito(bebida)">
+                <ion-icon name="add-circle" slot="start"></ion-icon>
+                Agregar
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Botón flotante del carrito -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="carrito.length > 0">
+    <ion-fab-button color="success">
+      <ion-icon name="basket"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <!-- Botón para vaciar el carrito -->
+      <ion-fab-button color="light" (click)="vaciarCarrito()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <!-- Resumen del carrito con total y opción de pago -->
+  <div class="cart-summary" *ngIf="carrito.length > 0">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="basket"></ion-icon>
+          Mi Pedido
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Lista de ítems en el carrito -->
+        <ion-list>
+          <ion-item *ngFor="let item of carrito">
+            <ion-label>
+              <h3>{{ item.nombre }}</h3>
+              <p>Cantidad: {{ item.cantidad }} - ${{ (item.precio * item.cantidad) | number }}</p>
+            </ion-label>
+            <!-- Botón para remover ítem del carrito -->
+            <ion-button fill="clear" color="danger" slot="end" (click)="removerDelCarrito(item)">
+              <ion-icon name="remove-circle"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+        <!-- Total y botón de pago -->
+        <div class="total-section">
+          <h2>Total: ${{ total | number }}</h2>
+          <ion-button expand="block" color="success">
+            <ion-icon name="card" slot="start"></ion-icon>
+            Proceder al Pago
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

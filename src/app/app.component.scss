@@ -1,0 +1,208 @@
+// Menú lateral
+ion-menu {
+  --width: 300px;
+  
+  .menu-content {
+    --background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
+    --color: white;
+  }
+}
+
+// Header del menú
+.menu-header {
+  display: flex;
+  align-items: center;
+  
+  .menu-logo {
+    font-size: 1.8rem;
+    margin-right: 10px;
+    color: var(--ion-color-primary);
+  }
+  
+  span {
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+}
+
+// Sección de usuario
+.user-section {
+  padding: 30px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+  color: white;
+  margin-bottom: 10px;
+  
+  .user-avatar {
+    margin-bottom: 15px;
+    
+    ion-icon {
+      font-size: 4rem;
+      color: rgba(255,255,255,0.9);
+    }
+  }
+  
+  .user-info {
+    h3 {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin: 0;
+    }
+  }
+}
+
+// Lista del menú
+.menu-list {
+  background: transparent;
+  padding: 10px 0;
+  
+  .menu-item {
+    --background: transparent;
+    --color: rgba(255,255,255,0.9);
+    --border-radius: 0;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --min-height: 50px;
+    margin-bottom: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+    
+    &:hover {
+      --background: rgba(var(--ion-color-primary-rgb), 0.2);
+      --color: white;
+      transform: translateX(5px);
+    }
+    
+    &.activated {
+      --background: var(--ion-color-primary);
+      --color: white;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--ion-color-secondary);
+      }
+    }
+    
+    ion-icon {
+      font-size: 1.4rem;
+      margin-right: 15px;
+    }
+    
+    ion-label {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    ion-badge {
+      --border-radius: 10px;
+    }
+  }
+  
+  .menu-divider {
+    --background: rgba(255,255,255,0.1);
+    --color: rgba(255,255,255,0.7);
+    margin: 15px 0 5px 0;
+    
+    ion-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+// Información del app
+.app-info {
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: auto;
+  
+  p {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.8rem;
+    margin: 5px 0;
+    
+    &:first-child {
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+    }
+  }
+}
+
+// Botón de cerrar sesión
+.logout-section {
+  padding: 20px;
+  
+  .logout-btn {
+    --border-radius: 25px;
+    --border-color: var(--ion-color-danger);
+    --color: var(--ion-color-danger);
+    height: 45px;
+    font-weight: 600;
+    
+    &:hover {
+      --background: var(--ion-color-danger);
+      --color: white;
+    }
+  }
+}
+
+// Animaciones de entrada
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.menu-item {
+  animation: slideInLeft 0.3s ease-out;
+  
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.15s; }
+  &:nth-child(3) { animation-delay: 0.2s; }
+  &:nth-child(4) { animation-delay: 0.25s; }
+  &:nth-child(5) { animation-delay: 0.3s; }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  ion-menu {
+    --width: 280px;
+  }
+  
+  .user-section {
+    padding: 25px 15px;
+    
+    .user-avatar ion-icon {
+      font-size: 3.5rem;
+    }
+    
+    .user-info h3 {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .menu-list .menu-item {
+    --padding-start: 15px;
+    --padding-end: 15px;
+    --min-height: 45px;
+  }
+}

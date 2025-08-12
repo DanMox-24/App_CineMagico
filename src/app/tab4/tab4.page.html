@@ -1,0 +1,260 @@
+<!-- 
+  Página "Acerca de"
+  Muestra información corporativa incluyendo:
+  - Historia de la empresa
+  - Servicios ofrecidos
+  - Equipo de trabajo
+  - Ubicación y contacto
+  - Horarios de atención
+  - Reconocimientos recibidos
+-->
+<ion-header [translucent]="true">
+  <!-- Barra de herramientas con botón de menú y título -->
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-menu-button (click)="openMenu()"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="information-circle-outline" style="margin-right: 8px;"></ion-icon>
+      Acerca de
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Contenido principal de la página -->
+<ion-content [fullscreen]="true" class="about-content">
+  <!-- Header alternativo para dispositivos con collapse -->
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Acerca de</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- ========== SECCIÓN HERO ========== -->
+  <div class="hero-about">
+    <div class="hero-content">
+      <ion-icon name="film" class="hero-icon"></ion-icon>
+      <h1>CineMágico</h1>
+      <p class="hero-subtitle">Donde los sueños cobran vida en pantalla grande</p>
+    </div>
+    <div class="hero-image">
+      <img src="assets/images/cinema-interior.png" alt="Interior del cine">
+    </div>
+  </div>
+
+  <!-- ========== HISTORIA DE LA EMPRESA ========== -->
+  <div class="section">
+    <h2 class="section-title">
+      <ion-icon name="library"></ion-icon>
+      Nuestra Historia
+    </h2>
+    
+    <ion-card class="story-card">
+      <ion-card-content>
+        <div class="story-content">
+          <div class="story-text">
+            <h3>Más de 20 años creando experiencias inolvidables</h3>
+            <p>
+              Desde 2003, CineMágico ha sido el hogar del entretenimiento cinematográfico en Bogotá. 
+              Comenzamos como un pequeño cine familiar y hemos crecido hasta convertirnos en uno de 
+              los complejos cinematográficos más modernos y queridos de la ciudad.
+            </p>
+            <p>
+              Nuestra misión es simple: brindar la mejor experiencia cinematográfica posible, 
+              combinando tecnología de vanguardia con un servicio excepcional y un ambiente acogedor 
+              que haga sentir como en casa a cada visitante.
+            </p>
+          </div>
+          <div class="story-image">
+            <img src="assets/images/cinema-history.jpg" alt="Historia del cine">
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- ========== SERVICIOS OFRECIDOS ========== -->
+  <div class="section">
+    <h2 class="section-title">
+      <ion-icon name="star"></ion-icon>
+      Nuestros Servicios
+    </h2>
+    
+    <!-- Grid responsive para mostrar servicios -->
+    <ion-grid>
+      <ion-row>
+        <!-- Itera sobre el array 'servicios' del componente -->
+        <ion-col size="12" size-md="6" *ngFor="let servicio of servicios">
+          <ion-card class="service-card">
+            <ion-card-content>
+              <div class="service-content">
+                <ion-icon [name]="servicio.icono" class="service-icon"></ion-icon>
+                <div class="service-info">
+                  <h4>{{ servicio.titulo }}</h4>
+                  <p>{{ servicio.descripcion }}</p>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- ========== EQUIPO DE TRABAJO ========== -->
+  <div class="section">
+    <h2 class="section-title">
+      <ion-icon name="people"></ion-icon>
+      Nuestro Equipo
+    </h2>
+    
+    <ion-grid>
+      <ion-row>
+        <!-- Itera sobre el array 'equipo' del componente -->
+        <ion-col size="12" size-md="4" *ngFor="let miembro of equipo">
+          <ion-card class="team-card">
+            <div class="team-image-container">
+              <img [src]="miembro.imagen" [alt]="miembro.nombre" class="team-image">
+            </div>
+            <ion-card-content>
+              <h3 class="team-name">{{ miembro.nombre }}</h3>
+              <p class="team-position">{{ miembro.cargo }}</p>
+              <p class="team-experience">{{ miembro.experiencia }}</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- ========== UBICACIÓN Y CONTACTO ========== -->
+  <div class="section">
+    <h2 class="section-title">
+      <ion-icon name="location"></ion-icon>
+      Nuestra Ubicación
+    </h2>
+    
+    <ion-card class="location-card">
+      <ion-card-content>
+        <div class="location-info">
+          <div class="address-section">
+            <h3>
+              <ion-icon name="pin"></ion-icon>
+              CineMágico Bogotá Centro
+            </h3>
+            <p class="address">
+              Carrera 13 #26-45<br>
+              La Candelaria, Bogotá D.C.<br>
+              Colombia
+            </p>
+            
+            <!-- Botones de contacto -->
+            <div class="contact-buttons">
+              <ion-button expand="block" fill="outline" color="primary" (click)="llamarCine()">
+                <ion-icon name="call" slot="start"></ion-icon>
+                +57 1 234 5678
+              </ion-button>
+              
+              <ion-button expand="block" fill="outline" color="secondary" (click)="enviarEmail()">
+                <ion-icon name="mail" slot="start"></ion-icon>
+                info@cinemagico.com
+              </ion-button>
+            </div>
+          </div>
+          
+          <!-- Mapa interactivo -->
+          <div class="map-container">
+            <div class="simple-map" (click)="abrirMapa()">
+              <div class="map-overlay">
+                <ion-icon name="navigate"></ion-icon>
+                <p>Toca para abrir en Google Maps</p>
+              </div>
+              <!-- Iframe con mapa de Google embebido -->
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.8234567890!2d-74.0817!3d4.6097!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNMKwMzYnMzUuMCJOIDc0wrAwNCc1NC4xIlc!5e0!3m2!1ses!2sco!4v1234567890"
+                width="100%"
+                height="250"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- ========== HORARIOS DE ATENCIÓN ========== -->
+  <div class="section">
+    <h2 class="section-title">
+      <ion-icon name="time"></ion-icon>
+      Horarios de Atención
+    </h2>
+    
+    <ion-card class="hours-card">
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-label>
+              <h3>Lunes a Jueves</h3>
+              <p>2:00 PM - 11:00 PM</p>
+            </ion-label>
+            <ion-icon name="time" color="primary" slot="end"></ion-icon>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label>
+              <h3>Viernes a Domingo</h3>
+              <p>12:00 PM - 12:00 AM</p>
+            </ion-label>
+            <ion-icon name="time" color="secondary" slot="end"></ion-icon>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label>
+              <h3>Días Festivos</h3>
+              <p>1:00 PM - 11:00 PM</p>
+            </ion-label>
+            <ion-icon name="time" color="tertiary" slot="end"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- ========== RECONOCIMIENTOS ========== -->
+  <div class="section">
+    <h2 class="section-title">
+      <ion-icon name="trophy"></ion-icon>
+      Reconocimientos
+    </h2>
+    
+    <div class="awards-grid">
+      <ion-card class="award-card">
+        <ion-card-content>
+          <ion-icon name="star" color="warning"></ion-icon>
+          <h4>Mejor Cine 2024</h4>
+          <p>Premio Bogotá Cultural</p>
+        </ion-card-content>
+      </ion-card>
+      
+      <ion-card class="award-card">
+        <ion-card-content>
+          <ion-icon name="heart" color="danger"></ion-icon>
+          <h4>Servicio Excepcional</h4>
+          <p>TripAdvisor 2023</p>
+        </ion-card-content>
+      </ion-card>
+      
+      <ion-card class="award-card">
+        <ion-card-content>
+          <ion-icon name="leaf" color="success"></ion-icon>
+          <h4>Cine Eco-Sostenible</h4>
+          <p>Certificación Verde 2023</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

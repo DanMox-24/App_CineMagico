@@ -1,0 +1,295 @@
+<!-- 
+  Página de autenticación (login/registro)
+  Incluye:
+  - Header con menú desplegable
+  - Segmento para alternar entre login/registro
+  - Formularios reactivos con validación
+  - Integración con autenticación social
+-->
+
+<!-- Header principal de la página -->
+<ion-header [translucent]="true">
+  <ion-toolbar color="secondary">
+    <!-- Botón de menú hamburguesa -->
+    <ion-buttons slot="start">
+      <ion-menu-button (click)="openMenu()"></ion-menu-button>
+    </ion-buttons>
+    <!-- Título de la página con icono -->
+    <ion-title>
+      <ion-icon name="person-outline" style="margin-right: 8px;"></ion-icon>
+      Mi Cuenta
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Contenido principal -->
+<ion-content [fullscreen]="true" class="auth-content">
+  <!-- Header alternativo (se muestra en dispositivos pequeños) -->
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Acceso</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Sección de logo y branding -->
+  <div class="auth-header">
+    <div class="logo-container">
+      <ion-icon name="film" class="logo-icon"></ion-icon>
+      <h1>CineMágico</h1>
+      <p>Tu experiencia cinematográfica perfecta</p>
+    </div>
+  </div>
+
+  <!-- Selector de pestañas (login/registro) -->
+  <div class="segment-container">
+    <ion-segment [(ngModel)]="segmentValue" color="primary">
+      <ion-segment-button value="login">
+        <ion-label>Iniciar Sesión</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="registro">
+        <ion-label>Registrarse</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <!-- ========== FORMULARIO DE LOGIN ========== -->
+  <div *ngIf="segmentValue === 'login'" class="form-container">
+    <ion-card class="auth-card">
+      <ion-card-header>
+        <ion-card-title class="form-title">
+          <ion-icon name="log-in"></ion-icon>
+          Bienvenido de vuelta
+        </ion-card-title>
+        <ion-card-subtitle>Accede a tu cuenta de CineMágico</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <!-- Formulario reactivo para login -->
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <!-- Campo de email -->
+          <ion-item class="form-item" lines="none">
+            <ion-icon name="mail" slot="start" color="primary"></ion-icon>
+            <ion-input
+              type="email"
+              placeholder="Correo electrónico"
+              formControlName="email"
+              [class.error]="loginForm.get('email')?.errors && loginForm.get('email')?.touched">
+            </ion-input>
+          </ion-item>
+          <!-- Mensaje de error para email -->
+          <div class="error-message" *ngIf="getErrorMessage(loginForm, 'email')">
+            {{ getErrorMessage(loginForm, 'email') }}
+          </div>
+
+          <!-- Campo de contraseña con toggle de visibilidad -->
+          <ion-item class="form-item" lines="none">
+            <ion-icon name="lock-closed" slot="start" color="primary"></ion-icon>
+            <ion-input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Contraseña"
+              formControlName="password"
+              [class.error]="loginForm.get('password')?.errors && loginForm.get('password')?.touched">
+            </ion-input>
+            <!-- Botón para mostrar/ocultar contraseña -->
+            <ion-button fill="clear" slot="end" (click)="togglePasswordVisibility()">
+              <ion-icon [name]="showPassword ? 'eye-off' : 'eye'" color="medium"></ion-icon>
+            </ion-button>
+          </ion-item>
+          <!-- Mensaje de error para contraseña -->
+          <div class="error-message" *ngIf="getErrorMessage(loginForm, 'password')">
+            {{ getErrorMessage(loginForm, 'password') }}
+          </div>
+
+          <!-- Acciones del formulario -->
+          <div class="form-actions">
+            <!-- Botón de submit -->
+            <ion-button expand="block" type="submit" [disabled]="!loginForm.valid" class="login-button">
+              <ion-icon name="log-in" slot="start"></ion-icon>
+              Iniciar Sesión
+            </ion-button>
+
+            <!-- Enlace para recuperar contraseña -->
+            <ion-button fill="clear" expand="block" color="medium" (click)="recuperarPassword()">
+              ¿Olvidaste tu contraseña?
+            </ion-button>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- ========== FORMULARIO DE REGISTRO ========== -->
+  <div *ngIf="segmentValue === 'registro'" class="form-container">
+    <ion-card class="auth-card">
+      <ion-card-header>
+        <ion-card-title class="form-title">
+          <ion-icon name="person-add"></ion-icon>
+          Crear cuenta nueva
+        </ion-card-title>
+        <ion-card-subtitle>Únete a la familia CineMágico</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <!-- Formulario reactivo para registro -->
+        <form [formGroup]="registroForm" (ngSubmit)="onRegistro()">
+          <!-- Fila de nombre y apellido -->
+          <div class="form-row">
+            <!-- Campo de nombre -->
+            <ion-item class="form-item half-width" lines="none">
+              <ion-icon name="person" slot="start" color="secondary"></ion-icon>
+              <ion-input
+                placeholder="Nombre"
+                formControlName="nombre"
+                [class.error]="registroForm.get('nombre')?.errors && registroForm.get('nombre')?.touched">
+              </ion-input>
+            </ion-item>
+
+            <!-- Campo de apellido -->
+            <ion-item class="form-item half-width" lines="none">
+              <ion-input
+                placeholder="Apellido"
+                formControlName="apellido"
+                [class.error]="registroForm.get('apellido')?.errors && registroForm.get('apellido')?.touched">
+              </ion-input>
+            </ion-item>
+          </div>
+          <!-- Mensajes de error para nombre y apellido -->
+          <div class="error-row">
+            <div class="error-message half-width" *ngIf="getErrorMessage(registroForm, 'nombre')">
+              {{ getErrorMessage(registroForm, 'nombre') }}
+            </div>
+            <div class="error-message half-width" *ngIf="getErrorMessage(registroForm, 'apellido')">
+              {{ getErrorMessage(registroForm, 'apellido') }}
+            </div>
+          </div>
+
+          <!-- Campo de email -->
+          <ion-item class="form-item" lines="none">
+            <ion-icon name="mail" slot="start" color="secondary"></ion-icon>
+            <ion-input
+              type="email"
+              placeholder="Correo electrónico"
+              formControlName="email"
+              [class.error]="registroForm.get('email')?.errors && registroForm.get('email')?.touched">
+            </ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="getErrorMessage(registroForm, 'email')">
+            {{ getErrorMessage(registroForm, 'email') }}
+          </div>
+
+          <!-- Fila de teléfono y fecha de nacimiento -->
+          <div class="form-row">
+            <!-- Campo de teléfono -->
+            <ion-item class="form-item half-width" lines="none">
+              <ion-icon name="call" slot="start" color="secondary"></ion-icon>
+              <ion-input
+                type="tel"
+                placeholder="Teléfono"
+                formControlName="telefono"
+                [class.error]="registroForm.get('telefono')?.errors && registroForm.get('telefono')?.touched">
+              </ion-input>
+            </ion-item>
+
+            <!-- Selector de fecha de nacimiento (modal) -->
+            <ion-item class="form-item half-width" lines="none">
+              <ion-icon name="calendar" slot="start" color="secondary"></ion-icon>
+
+              <!-- Botón que abre el modal con el datetime -->
+              <ion-datetime-button datetime="fechaNacimientoPicker">
+                <span>
+                  {{ registroForm.get('fechaNacimiento')?.value
+                       ? (registroForm.get('fechaNacimiento')?.value | date:'dd/MM/yyyy')
+                       : 'Fecha de nacimiento' }}
+                </span>
+              </ion-datetime-button>
+
+              <!-- Modal que contiene el ion-datetime -->
+              <ion-modal keepContentsMounted>
+                <ng-template>
+                  <ion-datetime
+                    id="fechaNacimientoPicker"
+                    presentation="date"
+                    [max]="maxDate"
+                    (ionChange)="onFechaChange($event)">
+                  </ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </ion-item>
+          </div>
+
+          <!-- Campo de contraseña -->
+          <ion-item class="form-item" lines="none">
+            <ion-icon name="lock-closed" slot="start" color="secondary"></ion-icon>
+            <ion-input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Contraseña"
+              formControlName="password"
+              [class.error]="registroForm.get('password')?.errors && registroForm.get('password')?.touched">
+            </ion-input>
+            <ion-button fill="clear" slot="end" (click)="togglePasswordVisibility()">
+              <ion-icon [name]="showPassword ? 'eye-off' : 'eye'" color="medium"></ion-icon>
+            </ion-button>
+          </ion-item>
+          <div class="error-message" *ngIf="getErrorMessage(registroForm, 'password')">
+            {{ getErrorMessage(registroForm, 'password') }}
+          </div>
+
+          <!-- Campo de confirmación de contraseña -->
+          <ion-item class="form-item" lines="none">
+            <ion-icon name="lock-closed" slot="start" color="secondary"></ion-icon>
+            <ion-input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              placeholder="Confirmar contraseña"
+              formControlName="confirmPassword"
+              [class.error]="registroForm.get('confirmPassword')?.errors && registroForm.get('confirmPassword')?.touched">
+            </ion-input>
+            <ion-button fill="clear" slot="end" (click)="toggleConfirmPasswordVisibility()">
+              <ion-icon [name]="showConfirmPassword ? 'eye-off' : 'eye'" color="medium"></ion-icon>
+            </ion-button>
+          </ion-item>
+          <div class="error-message" *ngIf="getErrorMessage(registroForm, 'confirmPassword')">
+            {{ getErrorMessage(registroForm, 'confirmPassword') }}
+          </div>
+
+          <!-- Checkbox de términos y condiciones -->
+          <ion-item class="checkbox-item" lines="none">
+            <ion-checkbox formControlName="terminos" slot="start"></ion-checkbox>
+            <ion-label class="checkbox-label">
+              Acepto los <a href="#" class="link">términos y condiciones</a> y la 
+              <a href="#" class="link">política de privacidad</a>
+            </ion-label>
+          </ion-item>
+
+          <!-- Botón de submit para registro -->
+          <div class="form-actions">
+            <ion-button expand="block" type="submit" [disabled]="!registroForm.valid" color="secondary" class="register-button">
+              <ion-icon name="person-add" slot="start"></ion-icon>
+              Crear Cuenta
+            </ion-button>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- ========== OPCIONES DE LOGIN SOCIAL ========== -->
+  <div class="social-login">
+    <div class="divider">
+      <span>O continúa con</span>
+    </div>
+    
+    <!-- Botones de autenticación social -->
+    <div class="social-buttons">
+      <ion-button expand="block" fill="outline" color="danger">
+        <ion-icon name="logo-google" slot="start"></ion-icon>
+        Google
+      </ion-button>
+      
+      <ion-button expand="block" fill="outline" color="dark">
+        <ion-icon name="logo-facebook" slot="start"></ion-icon>
+        Facebook
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>

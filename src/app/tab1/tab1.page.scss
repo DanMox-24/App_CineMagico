@@ -1,0 +1,222 @@
+.home-content {
+  --background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+// Hero Section
+.hero-section {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.6);
+  }
+  
+  .hero-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 2;
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    }
+    
+    p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    }
+  }
+}
+
+// Section Titles
+.section-title {
+  color: var(--ion-color-primary);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 20px 16px 10px 16px;
+  display: flex;
+  align-items: center;
+  
+  ion-icon {
+    margin-right: 8px;
+    font-size: 1.8rem;
+  }
+}
+
+// Movies Section
+.movies-section {
+  padding: 0 8px;
+  
+  .movie-card {
+    margin-bottom: 16px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    background: var(--ion-color-light);
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+  }
+  
+  .card-image-container {
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+    
+    .movie-poster {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .movie-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    &:hover .movie-overlay {
+      opacity: 1;
+    }
+    
+    &:hover .movie-poster {
+      transform: scale(1.05);
+    }
+  }
+  
+  .movie-title {
+    color: var(--ion-color-dark);
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .movie-info {
+    color: var(--ion-color-medium);
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    
+    ion-icon {
+      margin-right: 5px;
+    }
+  }
+  
+  .price-section {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .schedule-section {
+    .schedule-title {
+      color: var(--ion-color-dark);
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      
+      ion-icon {
+        margin-right: 5px;
+      }
+    }
+    
+    .schedule-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+// Promotions Section
+.promotions-section {
+  padding: 0 16px;
+  margin-top: 20px;
+  
+  .promo-card {
+    margin-bottom: 12px;
+    border-radius: 12px;
+    background: linear-gradient(45deg, var(--ion-color-primary-tint), var(--ion-color-secondary-tint));
+    
+    .promo-content {
+      display: flex;
+      align-items: center;
+      
+      .promo-icon {
+        font-size: 2rem;
+        margin-right: 15px;
+      }
+      
+      h4 {
+        margin: 0;
+        color: var(--ion-color-dark);
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+      
+      p {
+        margin: 5px 0 0 0;
+        color: var(--ion-color-medium-shade);
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .hero-section {
+    height: 200px;
+    
+    .hero-overlay h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  .movie-card .card-image-container {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    height: 180px;
+    
+    .hero-overlay h1 {
+      font-size: 1.5rem;
+    }
+    
+    .hero-overlay p {
+      font-size: 1rem;
+    }
+  }
+  
+  .section-title {
+    font-size: 1.3rem;
+  }
+}

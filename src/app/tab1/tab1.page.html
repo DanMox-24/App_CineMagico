@@ -1,0 +1,140 @@
+<!-- Encabezado principal con menú lateral y título -->
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <!-- Botón para abrir el menú lateral -->
+      <ion-menu-button (click)="openMenu()"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <!-- Icono y nombre de la app -->
+      <ion-icon name="film-outline" style="margin-right: 8px;"></ion-icon>
+      CineMágico
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Contenido principal de la página -->
+<ion-content [fullscreen]="true" class="home-content">
+  <!-- Encabezado condensado para scroll -->
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Cartelera</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Sección de banner promocional -->
+  <div class="hero-section">
+    <img src="assets/images/cinema-banner.png" alt="Cinema Banner" class="hero-image">
+    <div class="hero-overlay">
+      <h1>¡Vive la Magia del Cine!</h1>
+      <p>Las mejores películas en pantalla grande</p>
+    </div>
+  </div>
+
+  <!-- Sección de películas en cartelera -->
+  <div class="movies-section">
+    <h2 class="section-title">
+      <ion-icon name="star"></ion-icon>
+      En Cartelera
+    </h2>
+
+    <!-- Grid de películas -->
+    <ion-grid>
+      <ion-row>
+        <!-- Iteración de películas -->
+        <ion-col size="12" size-md="6" size-lg="4" *ngFor="let pelicula of peliculas">
+          <ion-card class="movie-card">
+            <div class="card-image-container">
+              <!-- Imagen de la película -->
+              <img [src]="pelicula.imagen" [alt]="pelicula.titulo" class="movie-poster">
+              <!-- Botón para ver trailer en ventana externa -->
+              <div class="movie-overlay">
+                <a [href]="pelicula.trailerUrl" target="_blank" rel="noopener noreferrer">
+                  <ion-button fill="solid" color="primary" size="small">
+                    <ion-icon name="play" slot="start"></ion-icon>
+                    Ver Trailer
+                  </ion-button>
+                </a>
+              </div>
+            </div>
+
+            <ion-card-content>
+              <!-- Título y detalles de la película -->
+              <h3 class="movie-title">{{ pelicula.titulo }}</h3>
+              <p class="movie-info">
+                <ion-icon name="time-outline"></ion-icon>
+                {{ pelicula.duracion }} | {{ pelicula.genero }}
+              </p>
+
+              <!-- Sección de precios por formato -->
+              <div class="price-section">
+                <ion-chip color="secondary" outline="true">
+                  <ion-label>2D: ${{ pelicula.precio2D | number }}</ion-label>
+                </ion-chip>
+                <ion-chip color="tertiary" outline="true">
+                  <ion-label>3D: ${{ pelicula.precio3D | number }}</ion-label>
+                </ion-chip>
+                <ion-chip color="primary" outline="true">
+                  <ion-label>4D: ${{ pelicula.precio4D | number }}</ion-label>
+                </ion-chip>
+              </div>
+
+              <!-- Sección de horarios disponibles -->
+              <div class="schedule-section">
+                <p class="schedule-title">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  Horarios Hoy
+                </p>
+                <div class="schedule-buttons">
+                  <!-- Botones de horarios -->
+                  <ion-button 
+                    size="small" 
+                    fill="outline" 
+                    color="primary"
+                    *ngFor="let horario of pelicula.horarios"
+                    (click)="seleccionarHorario(pelicula, horario)">
+                    {{ horario }}
+                  </ion-button>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Sección de promociones especiales -->
+  <div class="promotions-section">
+    <h2 class="section-title">
+      <ion-icon name="gift"></ion-icon>
+      Promociones Especiales
+    </h2>
+
+    <!-- Promoción: Martes de Parejas -->
+    <ion-card class="promo-card">
+      <ion-card-content>
+        <div class="promo-content">
+          <ion-icon name="heart" color="danger" class="promo-icon"></ion-icon>
+          <div>
+            <h4>Martes de Parejas</h4>
+            <p>2x1 en todas las funciones - Solo los martes</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Promoción: Descuento Estudiante -->
+    <ion-card class="promo-card">
+      <ion-card-content>
+        <div class="promo-content">
+          <ion-icon name="school" color="warning" class="promo-icon"></ion-icon>
+          <div>
+            <h4>Descuento Estudiante</h4>
+            <p>25% de descuento con carnet vigente</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

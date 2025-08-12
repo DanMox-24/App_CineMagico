@@ -1,0 +1,134 @@
+<ion-app>
+  <ion-menu side="start" menuId="first" contentId="main" type="overlay">
+    <ion-header>
+      <ion-toolbar color="dark">
+        <ion-title>
+          <div class="menu-header">
+            <ion-icon name="film" class="menu-logo"></ion-icon>
+            <span>CineMágico</span>
+          </div>
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="menu-content">
+      <!-- Perfil de Usuario -->
+      <div class="user-section">
+        <div class="user-avatar">
+          <ion-icon name="person-circle"></ion-icon>
+        </div>
+        <div class="user-info">
+          <h3>Bienvenido</h3>
+          <p>usuario@cinemagico.com</p>
+        </div>
+      </div>
+
+      <!-- Navegación Principal -->
+      <ion-list lines="none" class="menu-list">
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button routerLink="/tabs/tab1" class="menu-item">
+            <ion-icon name="film" slot="start"></ion-icon>
+            <ion-label>Cartelera</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button routerLink="/tabs/tab2" class="menu-item">
+            <ion-icon name="fast-food" slot="start"></ion-icon>
+            <ion-label>Snacks & Bebidas</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button routerLink="/tabs/tab3" class="menu-item">
+            <ion-icon name="person" slot="start"></ion-icon>
+            <ion-label>Mi Cuenta</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button routerLink="/tabs/tab4" class="menu-item">
+            <ion-icon name="information-circle" slot="start"></ion-icon>
+            <ion-label>Acerca de</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button routerLink="/tabs/tab5" class="menu-item">
+            <ion-icon name="ticket" slot="start"></ion-icon>
+            <ion-label>Mis Tickets</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <!-- Separador -->
+        <ion-item-divider class="menu-divider">
+          <ion-label>Servicios</ion-label>
+        </ion-item-divider>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button class="menu-item" id="promociones">
+            <ion-icon name="gift" slot="start" color="secondary"></ion-icon>
+            <ion-label>Promociones</ion-label>
+            <ion-badge color="danger" slot="end">3</ion-badge>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button class="menu-item" id="historial">
+            <ion-icon name="time" slot="start" color="tertiary"></ion-icon>
+            <ion-label>Historial</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button class="menu-item" id="favoritos">
+            <ion-icon name="heart" slot="start" color="danger"></ion-icon>
+            <ion-label>Mis Favoritos</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <!-- Separador -->
+        <ion-item-divider class="menu-divider">
+          <ion-label>Soporte</ion-label>
+        </ion-item-divider>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button class="menu-item" id="ayuda">
+            <ion-icon name="help-circle" slot="start" color="warning"></ion-icon>
+            <ion-label>Ayuda & Soporte</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button class="menu-item" id="contacto">
+            <ion-icon name="call" slot="start" color="success"></ion-icon>
+            <ion-label>Contacto</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button class="menu-item" id="configuracion">
+            <ion-icon name="settings" slot="start" color="medium"></ion-icon>
+            <ion-label>Configuración</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+
+      <!-- Información del App -->
+      <div class="app-info">
+        <p>CineMágico v1.0.0</p>
+        <p>© 2025 Todos los derechos reservados</p>
+      </div>
+
+      <!-- Botón de Cerrar Sesión -->
+      <div class="logout-section">
+        <ion-button expand="block" fill="clear" color="danger" class="logout-btn">
+          <ion-icon name="log-out" slot="start"></ion-icon>
+          Cerrar Sesión
+        </ion-button>
+      </div>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main"></ion-router-outlet>
+</ion-app>
